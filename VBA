@@ -104,7 +104,7 @@ Dim areaRow, dateCol, NoCases As Integer
 Set CurrentArea = wsSites.Cells(2, 2)
 dateCol = wsFigs.Range("A1").End(xlToRight).Column
 dateStr = wsFigs.Range("A1").End(xlToRight).Text
-wbTool.Sheets("HOME").Range("RECENT_DATE") = dateStr
+'wbTool.Sheets("HOME").Range("RECENT_DATE") = dateStr
 'dateCol = wsFigs.Rows("1").Find(what:=CDate(dateStr), LookIn:=xlFormulas, lookat:=xlPart).Column
 
 Do Until CurrentArea = ""
@@ -125,9 +125,9 @@ Do Until CurrentArea = ""
         AreaName = CurrentArea.Text
     End If
     areaRow = wsFigs.Columns("A").Find(AreaName).Row
-    Set FoundArea = wsGovDat.Range("A:A").Find(what:=AreaName)
+    Set FoundArea = wsGovDat.Range("A:A").Find(what:=AreaName, lookat:=xlWhole)
     Do Until FoundArea.Offset(0, 3).Text = dateStr
-        Set FoundArea = wsGovDat.Range("A:A").Find(what:=AreaName, after:=FoundArea)
+        Set FoundArea = wsGovDat.Range("A:A").Find(what:=AreaName, after:=FoundArea, lookat:=xlWhole)
     Loop
     NoCases = FoundArea.Offset(0, 5)
     wsFigs.Cells(areaRow, dateCol) = NoCases
@@ -169,6 +169,8 @@ Loop
 End Sub
 
 Sub MAKE_LIST_AND_CHART_FROM_UK_DATA()
+
+Application.ScreenUpdating = False
 
 '-------- initial setup -----------
 
@@ -292,10 +294,16 @@ End With
     ActiveSheet.Shapes("Chart 1").IncrementLeft 241.2
     ActiveSheet.Shapes("Chart 1").IncrementTop -44.4
     ActiveChart.ChartTitle.Text = "Cumulative COVID-19 Cases in Top 5 BDUK Areas (England)"
+    ActiveWindow.SmallScroll ToRight:=-16
+    
+Application.ScreenUpdating = True
 
 End Sub
 
 Sub EXPORT_AS_CSV()
+
+Application.DisplayAlerts = False
+Application.ScreenUpdating = False
 
 '-------- initial setup -----------
 
@@ -331,7 +339,9 @@ Set wsGovDat = Workbooks(govDatName).Sheets(1)
 Set wsUScases = Workbooks(USCasesName).Sheets(1)
 Set wsUSdeaths = Workbooks(USDeathsName).Sheets(1)
 
-'----------- export csvs ---------------
+'----------- prep & export csvs ---------------
+
+wsSites.Columns("H:I").Delete
 
 Dim sitesCSV, peopleCSV, usCSV As Workbook
 Dim filename As String
@@ -353,6 +363,9 @@ Set usCSV = Workbooks.Add
 wsUS.Copy Before:=usCSV.Sheets(1)
 usCSV.SaveAs filename:=filename, FileFormat:=xlCSV, CreateBackup:=False
 usCSV.Close savechanges:=True
+
+Application.DisplayAlerts = True
+Application.ScreenUpdating = True
 
 End Sub
 
