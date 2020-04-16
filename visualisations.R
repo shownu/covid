@@ -41,7 +41,7 @@ show_us_sites <- function(dat) {
 
 
 show_uk_areas <- function(dat) {
-  test2 <- areas
+  test2 <- dat
   mybins <- seq(0, max(test2$cases)+2500, by=2000)
   mypalette <- colorBin( palette="YlOrBr", domain=test2$cases, na.color="transparent", bins=mybins)
   mytext <- paste(test2$area, "-", test2$cases, "cases", sep=" ") %>%
@@ -61,7 +61,7 @@ show_uk_areas <- function(dat) {
 
 
 show_bduk_personnel <- function(dat) {
-  test2 <- people
+  test2 <- dat
   mypalette <- colorFactor(c("red", "green"), domain=test2$status, na.color="transparent")
   mytext <- paste(test2$base, sep=" ") %>%
     lapply(htmltools::HTML)
