@@ -294,7 +294,7 @@ End With
     ActiveSheet.Shapes("Chart 1").IncrementLeft 241.2
     ActiveSheet.Shapes("Chart 1").IncrementTop -44.4
     ActiveChart.ChartTitle.Text = "Cumulative COVID-19 Cases in Top 5 BDUK Areas (England)"
-    ActiveWindow.SmallScroll ToRight:=-16
+    Application.Goto Reference:=Range("B1"), Scroll:=True
     
 Application.ScreenUpdating = True
 
