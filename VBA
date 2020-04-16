@@ -1,0 +1,358 @@
+Option Explicit
+
+Sub UPDATE_US_DAT()
+
+'-------- initial setup -----------
+
+Dim wbTool As Workbook
+Set wbTool = ThisWorkbook
+
+Dim filepath As String
+filepath = wbTool.Sheets("HOME").Range("FILEPATH")
+
+Dim wsFigs, wsSites, wsPeople, wsUS As Worksheet
+Dim figsShtName, sitesShtName, peopleShtName, USShtName As String
+Dim govDatName, USCasesName, USDeathsName As String
+
+With wbTool
+    With .Sheets("HOME")
+        figsShtName = .Range("ENG_FIGURES")
+        sitesShtName = .Range("BDUK_SITES")
+        peopleShtName = .Range("BDUK_PEOPLE")
+        USShtName = .Range("US_DATA")
+        govDatName = .Range("UK_GOV_DAT")
+        USCasesName = .Range("US_CASE_DAT")
+        USDeathsName = .Range("US_DEATH_DAT")
+    End With
+    Set wsFigs = .Sheets(figsShtName)
+    Set wsSites = .Sheets(sitesShtName)
+    Set wsPeople = .Sheets(peopleShtName)
+    Set wsUS = .Sheets(USShtName)
+End With
+
+Dim wsGovDat, wsUScases, wsUSdeaths As Worksheet
+
+Set wsGovDat = Workbooks(govDatName).Sheets(1)
+Set wsUScases = Workbooks(USCasesName).Sheets(1)
+Set wsUSdeaths = Workbooks(USDeathsName).Sheets(1)
+
+'----------------- update numbers -------------------
+
+Dim EndOfRow As Integer
+Dim AreaName As String
+Dim FoundArea As Range
+Dim CurrentArea
+Dim NoCases, NoDeaths As Integer
+
+Set CurrentArea = wsUS.Cells(2, 2)
+
+Do Until CurrentArea = ""
+    AreaName = CurrentArea.Text
+    Set FoundArea = wsUScases.Range("A:A").Find(AreaName)
+    NoCases = wsUScases.Cells(FoundArea.Row, 3)
+    CurrentArea.Offset(0, 3) = NoCases
+    Set FoundArea = wsUSdeaths.Range("B:B").Find(AreaName)
+    NoDeaths = wsUSdeaths.Cells(FoundArea.Row, 3)
+    CurrentArea.Offset(0, 4) = NoDeaths
+Set CurrentArea = CurrentArea.Offset(1, 0)
+Loop
+
+End Sub
+
+Sub UPDATE_UK_DAT()
+
+'-------- initial setup -----------
+
+Dim wbTool As Workbook
+Set wbTool = ThisWorkbook
+
+Dim filepath As String
+filepath = wbTool.Sheets("HOME").Range("FILEPATH")
+
+Dim wsFigs, wsSites, wsPeople, wsUS As Worksheet
+Dim figsShtName, sitesShtName, peopleShtName, USShtName As String
+Dim govDatName, USCasesName, USDeathsName As String
+
+With wbTool
+    With .Sheets("HOME")
+        figsShtName = .Range("ENG_FIGURES")
+        sitesShtName = .Range("BDUK_SITES")
+        peopleShtName = .Range("BDUK_PEOPLE")
+        USShtName = .Range("US_DATA")
+        govDatName = .Range("UK_GOV_DAT")
+        USCasesName = .Range("US_CASE_DAT")
+        USDeathsName = .Range("US_DEATH_DAT")
+    End With
+    Set wsFigs = .Sheets(figsShtName)
+    Set wsSites = .Sheets(sitesShtName)
+    Set wsPeople = .Sheets(peopleShtName)
+    Set wsUS = .Sheets(USShtName)
+End With
+
+Dim wsGovDat, wsUScases, wsUSdeaths As Worksheet
+
+Set wsGovDat = Workbooks(govDatName).Sheets(1)
+Set wsUScases = Workbooks(USCasesName).Sheets(1)
+Set wsUSdeaths = Workbooks(USDeathsName).Sheets(1)
+
+'----------------- update from download -------------------
+
+Dim dateStr, AreaName As String
+Dim CurrentArea, FoundArea As Range
+Dim areaRow, dateCol, NoCases As Integer
+
+Set CurrentArea = wsSites.Cells(2, 2)
+dateCol = wsFigs.Range("A1").End(xlToRight).Column
+dateStr = wsFigs.Range("A1").End(xlToRight).Text
+wbTool.Sheets("HOME").Range("RECENT_DATE") = dateStr
+'dateCol = wsFigs.Rows("1").Find(what:=CDate(dateStr), LookIn:=xlFormulas, lookat:=xlPart).Column
+
+Do Until CurrentArea = ""
+    AreaName = CurrentArea.Text
+    If AreaName = "Cardiff" Then
+        CurrentArea.Offset(0, 3) = wbTool.Sheets("HOME").Range("CARDIFF")
+        Set CurrentArea = CurrentArea.Offset(1, 0)
+        AreaName = CurrentArea.Text
+    End If
+    If AreaName = "Grampian" Then
+        CurrentArea.Offset(0, 3) = wbTool.Sheets("HOME").Range("GRAMPIAN")
+        Set CurrentArea = CurrentArea.Offset(1, 0)
+        AreaName = CurrentArea.Text
+    End If
+    If AreaName = "Tayside" Then
+        CurrentArea.Offset(0, 3) = wbTool.Sheets("HOME").Range("TAYSIDE")
+        Set CurrentArea = CurrentArea.Offset(1, 0)
+        AreaName = CurrentArea.Text
+    End If
+    areaRow = wsFigs.Columns("A").Find(AreaName).Row
+    Set FoundArea = wsGovDat.Range("A:A").Find(what:=AreaName)
+    Do Until FoundArea.Offset(0, 3).Text = dateStr
+        Set FoundArea = wsGovDat.Range("A:A").Find(what:=AreaName, after:=FoundArea)
+    Loop
+    NoCases = FoundArea.Offset(0, 5)
+    wsFigs.Cells(areaRow, dateCol) = NoCases
+    Set CurrentArea = CurrentArea.Offset(1, 0)
+Loop
+
+'----------------- load new data onto sites sheet -------------------
+
+Dim EndOfRow As Integer
+Dim i As Integer
+
+i = wsFigs.Range("A1").End(xlToRight).Column
+
+Set CurrentArea = wsSites.Cells(2, 2)
+
+Do Until CurrentArea = ""
+    AreaName = CurrentArea.Text
+    If AreaName = "Cardiff" Then
+        CurrentArea.Offset(0, 3) = wbTool.Sheets("HOME").Range("CARDIFF")
+        Set CurrentArea = CurrentArea.Offset(1, 0)
+        AreaName = CurrentArea.Text
+    End If
+    If AreaName = "Grampian" Then
+        CurrentArea.Offset(0, 3) = wbTool.Sheets("HOME").Range("GRAMPIAN")
+        Set CurrentArea = CurrentArea.Offset(1, 0)
+        AreaName = CurrentArea.Text
+    End If
+    If AreaName = "Tayside" Then
+        CurrentArea.Offset(0, 3) = wbTool.Sheets("HOME").Range("TAYSIDE")
+        Set CurrentArea = CurrentArea.Offset(1, 0)
+        AreaName = CurrentArea.Text
+    End If
+    Set FoundArea = wsFigs.Range("A:A").Find(AreaName)
+    NoCases = wsFigs.Cells(FoundArea.Row, i)
+    CurrentArea.Offset(0, 3) = NoCases
+Set CurrentArea = CurrentArea.Offset(1, 0)
+Loop
+
+End Sub
+
+Sub MAKE_LIST_AND_CHART_FROM_UK_DATA()
+
+'-------- initial setup -----------
+
+Dim wbTool As Workbook
+Set wbTool = ThisWorkbook
+
+Dim filepath As String
+filepath = wbTool.Sheets("HOME").Range("FILEPATH")
+
+Dim wsFigs, wsSites, wsPeople, wsUS As Worksheet
+Dim figsShtName, sitesShtName, peopleShtName, USShtName As String
+Dim govDatName, USCasesName, USDeathsName As String
+
+With wbTool
+    With .Sheets("HOME")
+        figsShtName = .Range("ENG_FIGURES")
+        sitesShtName = .Range("BDUK_SITES")
+        peopleShtName = .Range("BDUK_PEOPLE")
+        USShtName = .Range("US_DATA")
+        govDatName = .Range("UK_GOV_DAT")
+        USCasesName = .Range("US_CASE_DAT")
+        USDeathsName = .Range("US_DEATH_DAT")
+    End With
+    Set wsFigs = .Sheets(figsShtName)
+    Set wsSites = .Sheets(sitesShtName)
+    Set wsPeople = .Sheets(peopleShtName)
+    Set wsUS = .Sheets(USShtName)
+End With
+
+Dim wsGovDat, wsUScases, wsUSdeaths As Worksheet
+
+Set wsGovDat = Workbooks(govDatName).Sheets(1)
+Set wsUScases = Workbooks(USCasesName).Sheets(1)
+Set wsUSdeaths = Workbooks(USDeathsName).Sheets(1)
+
+'----------------- make list -------------------
+
+Application.DisplayAlerts = False
+wbTool.Sheets("CHART").Delete
+Application.DisplayAlerts = True
+
+Dim wsChart As Worksheet
+
+wsFigs.Copy after:=wbTool.Sheets(3)
+ActiveSheet.Name = "CHART"
+Set wsChart = wbTool.Sheets("CHART")
+
+wsSites.Activate
+wsSites.Columns("H:I").Delete
+wsSites.Range("B2:B26").Copy Destination:=wsSites.Range("H3")
+wsSites.Range("E2:E26").Copy Destination:=wsSites.Range("I3")
+wsSites.Range("H3:I27").RemoveDuplicates Columns:=Array(1, 2)
+
+Dim AreaName As String
+Dim FoundArea, CasesRow As Range
+Dim CurrentArea
+Dim i As Integer
+
+wsSites.Range("H2") = "Area"
+wsSites.Range("I2") = "Cases"
+wsSites.Range("H2:I17").Select
+wsSites.ListObjects.Add(xlSrcRange, Range("$H$2:$I$17"), , xlYes).Name = "Table5"
+wsSites.ListObjects("Table5").TableStyle = "TableStyleLight9"
+wsSites.ListObjects("Table5").Sort.SortFields.Clear
+wsSites.ListObjects("Table5").Sort.SortFields.Add _
+    Key:=Range("Table5[[#All],[Cases]]"), SortOn:=xlSortOnValues, Order:= _
+    xlDescending, DataOption:=xlSortNormal
+With wsSites.ListObjects("Table5").Sort
+    .Header = xlYes
+    .MatchCase = False
+    .Orientation = xlTopToBottom
+    .SortMethod = xlPinYin
+    .Apply
+End With
+Columns("H:H").EntireColumn.AutoFit
+wsSites.ListObjects("Table5").Resize Range("$H$2:$I$19")
+
+'------------------ make chart --------------
+
+wsChart.Activate
+
+Dim wantedCel As Range
+Dim dat, tblName As String
+Dim numcol As Integer
+
+Set wantedCel = wsChart.Range("B1").End(xlToRight)
+dat = wantedCel.Text
+numcol = wantedCel.Column
+tblName = wsChart.ListObjects(1).Name
+
+With wsChart
+    .Range("B1").Select
+    .Range(Selection, Selection.End(xlToRight)).Select
+    .Range(Selection, Selection.End(xlDown)).Select
+    With .ListObjects(1).Sort
+        .SortFields.Clear
+        .SortFields.Add _
+        Key:=Range(tblName & "[[#All],[" & dat & "]]"), SortOn:=xlSortOnValues, Order _
+        :=xlDescending, DataOption:=xlSortNormal
+        .Header = xlYes
+        .MatchCase = False
+        .Orientation = xlTopToBottom
+        .SortMethod = xlPinYin
+        .Apply
+    End With
+    .Range("A1:A6").Select
+    .Range(Selection, Selection.End(xlToRight)).Select
+    .Shapes.AddChart2(332, xlLineMarkers).Select
+End With
+
+    ActiveChart.SetSourceData Source:=Sheets("CHART").Range(Cells(1, 1), Cells(6, numcol))
+    ActiveChart.PlotBy = xlRows
+    ActiveSheet.Shapes("Chart 1").IncrementLeft 190.2
+    ActiveSheet.Shapes("Chart 1").IncrementTop 166.2
+    ActiveSheet.Shapes("Chart 1").ScaleWidth 1.3116666667, msoFalse, _
+        msoScaleFromBottomRight
+    ActiveSheet.Shapes("Chart 1").ScaleHeight 1.6666666667, msoFalse, _
+        msoScaleFromBottomRight
+    ActiveSheet.Shapes("Chart 1").ScaleHeight 0.7983333333, msoFalse, _
+        msoScaleFromBottomRight
+    ActiveSheet.Shapes("Chart 1").IncrementLeft 241.2
+    ActiveSheet.Shapes("Chart 1").IncrementTop -44.4
+    ActiveChart.ChartTitle.Text = "Cumulative COVID-19 Cases in Top 5 BDUK Areas (England)"
+
+End Sub
+
+Sub EXPORT_AS_CSV()
+
+'-------- initial setup -----------
+
+Dim wbTool As Workbook
+Set wbTool = ThisWorkbook
+
+Dim filepath As String
+filepath = wbTool.Sheets("HOME").Range("FILEPATH") & "\"
+
+Dim wsFigs, wsSites, wsPeople, wsUS As Worksheet
+Dim figsShtName, sitesShtName, peopleShtName, USShtName As String
+Dim govDatName, USCasesName, USDeathsName As String
+
+With wbTool
+    With .Sheets("HOME")
+        figsShtName = .Range("ENG_FIGURES")
+        sitesShtName = .Range("BDUK_SITES")
+        peopleShtName = .Range("BDUK_PEOPLE")
+        USShtName = .Range("US_DATA")
+        govDatName = .Range("UK_GOV_DAT")
+        USCasesName = .Range("US_CASE_DAT")
+        USDeathsName = .Range("US_DEATH_DAT")
+    End With
+    Set wsFigs = .Sheets(figsShtName)
+    Set wsSites = .Sheets(sitesShtName)
+    Set wsPeople = .Sheets(peopleShtName)
+    Set wsUS = .Sheets(USShtName)
+End With
+
+Dim wsGovDat, wsUScases, wsUSdeaths As Worksheet
+
+Set wsGovDat = Workbooks(govDatName).Sheets(1)
+Set wsUScases = Workbooks(USCasesName).Sheets(1)
+Set wsUSdeaths = Workbooks(USDeathsName).Sheets(1)
+
+'----------- export csvs ---------------
+
+Dim sitesCSV, peopleCSV, usCSV As Workbook
+Dim filename As String
+
+filename = filepath & sitesShtName
+Set sitesCSV = Workbooks.Add
+wsSites.Copy Before:=sitesCSV.Sheets(1)
+sitesCSV.SaveAs filename:=filename, FileFormat:=xlCSV, CreateBackup:=False
+sitesCSV.Close savechanges:=True
+
+filename = filepath & peopleShtName
+Set peopleCSV = Workbooks.Add
+wsPeople.Copy Before:=peopleCSV.Sheets(1)
+peopleCSV.SaveAs filename:=filename, FileFormat:=xlCSV, CreateBackup:=False
+peopleCSV.Close savechanges:=True
+
+filename = filepath & USShtName
+Set usCSV = Workbooks.Add
+wsUS.Copy Before:=usCSV.Sheets(1)
+usCSV.SaveAs filename:=filename, FileFormat:=xlCSV, CreateBackup:=False
+usCSV.Close savechanges:=True
+
+End Sub
+
