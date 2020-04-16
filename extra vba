@@ -1,0 +1,40 @@
+Sub AREAS()
+
+Dim wsOutput As Worksheet
+Dim wsPHE As Workbook
+Dim FileName As String
+
+Set wsPHE = ActiveWorkbook
+
+FileName = "areas.csv"
+Workbooks.Open ("C:\Users\kd897e\Documents\" & FileName)
+Set wsOutput = ActiveWorkbook.Sheets("areas")
+
+Dim EndOfRow As Integer
+Dim AreaName As String
+Dim FoundArea As Range
+Dim CurrentArea
+Dim NoCases As Integer
+Dim i, j As Integer
+
+j = wsPHE.Sheets("NHS Regions").Range("A8").End(xlToRight).Column
+
+For i = 2 To 8
+    Set CurrentArea = wsOutput.Cells(i, 1)
+    AreaName = CurrentArea.Text
+    Set FoundArea = wsPHE.Sheets("NHS Regions").Range("B:B").Find(AreaName)
+    NoCases = wsPHE.Sheets("NHS Regions").Cells(FoundArea.Row, j)
+    CurrentArea.Offset(0, 3) = NoCases
+Next i
+
+j = wsPHE.Sheets("Countries").Range("A8").End(xlToRight).Column
+
+For i = 9 To 11
+    Set CurrentArea = wsOutput.Cells(i, 1)
+    AreaName = CurrentArea.Text
+    Set FoundArea = wsPHE.Sheets("Countries").Range("B:B").Find(AreaName)
+    NoCases = wsPHE.Sheets("Countries").Cells(FoundArea.Row, j)
+    CurrentArea.Offset(0, 3) = NoCases
+Next i
+
+End Sub
