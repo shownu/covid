@@ -92,6 +92,7 @@ End With
 Dim wsGovDat, wsUScases, wsUSdeaths As Worksheet
 
 Set wsGovDat = Workbooks(govDatName).Sheets(1)
+wsGovDat.Columns.AutoFit
 Set wsUScases = Workbooks(USCasesName).Sheets(1)
 Set wsUSdeaths = Workbooks(USDeathsName).Sheets(1)
 
