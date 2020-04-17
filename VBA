@@ -201,11 +201,11 @@ With wbTool
     Set wsUS = .Sheets(USShtName)
 End With
 
-Dim wsGovDat, wsUScases, wsUSdeaths As Worksheet
-
-Set wsGovDat = Workbooks(govDatName).Sheets(1)
-Set wsUScases = Workbooks(USCasesName).Sheets(1)
-Set wsUSdeaths = Workbooks(USDeathsName).Sheets(1)
+'Dim wsGovDat, wsUScases, wsUSdeaths As Worksheet
+'
+'Set wsGovDat = Workbooks(govDatName).Sheets(1)
+'Set wsUScases = Workbooks(USCasesName).Sheets(1)
+'Set wsUSdeaths = Workbooks(USDeathsName).Sheets(1)
 
 '----------------- make list -------------------
 
@@ -334,11 +334,11 @@ With wbTool
     Set wsUS = .Sheets(USShtName)
 End With
 
-Dim wsGovDat, wsUScases, wsUSdeaths As Worksheet
-
-Set wsGovDat = Workbooks(govDatName).Sheets(1)
-Set wsUScases = Workbooks(USCasesName).Sheets(1)
-Set wsUSdeaths = Workbooks(USDeathsName).Sheets(1)
+'Dim wsGovDat, wsUScases, wsUSdeaths As Worksheet
+'
+'Set wsGovDat = Workbooks(govDatName).Sheets(1)
+'Set wsUScases = Workbooks(USCasesName).Sheets(1)
+'Set wsUSdeaths = Workbooks(USDeathsName).Sheets(1)
 
 '----------- prep & export csvs ---------------
 
