@@ -32,9 +32,12 @@ End With
 
 Dim wsGovDat, wsUScases, wsUSdeaths As Worksheet
 
-Set wsGovDat = Workbooks(govDatName).Sheets(1)
+'Set wsGovDat = Workbooks(govDatName).Sheets(1)
+'wsGovDat.Columns.AutoFit
 Set wsUScases = Workbooks(USCasesName).Sheets(1)
+wsUScases.Columns.AutoFit
 Set wsUSdeaths = Workbooks(USDeathsName).Sheets(1)
+wsUSdeaths.Columns.AutoFit
 
 '----------------- update numbers -------------------
 
@@ -51,8 +54,8 @@ Do Until CurrentArea = ""
     Set FoundArea = wsUScases.Range("A:A").Find(AreaName)
     NoCases = wsUScases.Cells(FoundArea.Row, 3)
     CurrentArea.Offset(0, 3) = NoCases
-    Set FoundArea = wsUSdeaths.Range("B:B").Find(AreaName)
-    NoDeaths = wsUSdeaths.Cells(FoundArea.Row, 3)
+    Set FoundArea = wsUSdeaths.Range("C:C").Find(AreaName)
+    NoDeaths = wsUSdeaths.Cells(FoundArea.Row, 7)
     CurrentArea.Offset(0, 4) = NoDeaths
 Set CurrentArea = CurrentArea.Offset(1, 0)
 Loop
@@ -93,8 +96,10 @@ Dim wsGovDat, wsUScases, wsUSdeaths As Worksheet
 
 Set wsGovDat = Workbooks(govDatName).Sheets(1)
 wsGovDat.Columns.AutoFit
-Set wsUScases = Workbooks(USCasesName).Sheets(1)
-Set wsUSdeaths = Workbooks(USDeathsName).Sheets(1)
+'Set wsUScases = Workbooks(USCasesName).Sheets(1)
+'wsUScases.Columns.AutoFit
+'Set wsUSdeaths = Workbooks(USDeathsName).Sheets(1)
+'wsUSdeaths.Columns.AutoFit
 
 '----------------- update from download -------------------
 
@@ -369,4 +374,3 @@ Application.DisplayAlerts = True
 Application.ScreenUpdating = True
 
 End Sub
-
