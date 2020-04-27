@@ -10,34 +10,34 @@ Set wbTool = ThisWorkbook
 Dim filepath As String
 filepath = wbTool.Sheets("HOME").Range("FILEPATH")
 
-Dim wsFigs, wsSites, wsPeople, wsUS As Worksheet
-Dim figsShtName, sitesShtName, peopleShtName, USShtName As String
-Dim govDatName, USCasesName, USDeathsName As String
+Dim wsFigs, wsSites, wsPeople, wsUSdat, wsUS As Worksheet
+Dim figsShtName, sitesShtName, peopleShtName, USfigsShtName, USshtname As String
+Dim govDatName As String
 
 With wbTool
     With .Sheets("HOME")
         figsShtName = .Range("ENG_FIGURES")
         sitesShtName = .Range("BDUK_SITES")
         peopleShtName = .Range("BDUK_PEOPLE")
-        USShtName = .Range("US_DATA")
+        USfigsShtName = .Range("US_FIGURES")
+        USshtname = .Range("US_DATA")
         govDatName = .Range("UK_GOV_DAT")
-        USCasesName = .Range("US_CASE_DAT")
-        USDeathsName = .Range("US_DEATH_DAT")
     End With
     Set wsFigs = .Sheets(figsShtName)
     Set wsSites = .Sheets(sitesShtName)
     Set wsPeople = .Sheets(peopleShtName)
-    Set wsUS = .Sheets(USShtName)
+    Set wsUSdat = .Sheets(USfigsShtName)
+    Set wsUS = .Sheets(USshtname)
 End With
 
-Dim wsGovDat, wsUScases, wsUSdeaths As Worksheet
+'Dim wsGovDat, wsUScases, wsUSdeaths As Worksheet
 
 'Set wsGovDat = Workbooks(govDatName).Sheets(1)
 'wsGovDat.Columns.AutoFit
-Set wsUScases = Workbooks(USCasesName).Sheets(1)
-wsUScases.Columns.AutoFit
-Set wsUSdeaths = Workbooks(USDeathsName).Sheets(1)
-wsUSdeaths.Columns.AutoFit
+'Set wsUScases = Workbooks(USCasesName).Sheets(1)
+'wsUScases.Columns.AutoFit
+'Set wsUSdeaths = Workbooks(USDeathsName).Sheets(1)
+'wsUSdeaths.Columns.AutoFit
 
 '----------------- update numbers -------------------
 
@@ -51,11 +51,11 @@ Set CurrentArea = wsUS.Cells(2, 2)
 
 Do Until CurrentArea = ""
     AreaName = CurrentArea.Text
-    Set FoundArea = wsUScases.Range("A:A").Find(AreaName)
-    NoCases = wsUScases.Cells(FoundArea.Row, 3)
+    Set FoundArea = wsUSdat.Range("A:A").Find(AreaName)
+    NoCases = wsUSdat.Cells(FoundArea.Row, 2)
     CurrentArea.Offset(0, 3) = NoCases
-    Set FoundArea = wsUSdeaths.Range("C:C").Find(AreaName)
-    NoDeaths = wsUSdeaths.Cells(FoundArea.Row, 7)
+    Set FoundArea = wsUSdat.Range("A:A").Find(AreaName)
+    NoDeaths = wsUSdat.Cells(FoundArea.Row, 4)
     CurrentArea.Offset(0, 4) = NoDeaths
 Set CurrentArea = CurrentArea.Offset(1, 0)
 Loop
@@ -72,24 +72,24 @@ Set wbTool = ThisWorkbook
 Dim filepath As String
 filepath = wbTool.Sheets("HOME").Range("FILEPATH")
 
-Dim wsFigs, wsSites, wsPeople, wsUS As Worksheet
-Dim figsShtName, sitesShtName, peopleShtName, USShtName As String
-Dim govDatName, USCasesName, USDeathsName As String
+Dim wsFigs, wsSites, wsPeople, wsUSdat, wsUS As Worksheet
+Dim figsShtName, sitesShtName, peopleShtName, USfigsShtName, USshtname As String
+Dim govDatName As String
 
 With wbTool
     With .Sheets("HOME")
         figsShtName = .Range("ENG_FIGURES")
         sitesShtName = .Range("BDUK_SITES")
         peopleShtName = .Range("BDUK_PEOPLE")
-        USShtName = .Range("US_DATA")
+        USfigsShtName = .Range("US_FIGURES")
+        USshtname = .Range("US_DATA")
         govDatName = .Range("UK_GOV_DAT")
-        USCasesName = .Range("US_CASE_DAT")
-        USDeathsName = .Range("US_DEATH_DAT")
     End With
     Set wsFigs = .Sheets(figsShtName)
     Set wsSites = .Sheets(sitesShtName)
     Set wsPeople = .Sheets(peopleShtName)
-    Set wsUS = .Sheets(USShtName)
+    Set wsUSdat = .Sheets(USfigsShtName)
+    Set wsUS = .Sheets(USshtname)
 End With
 
 Dim wsGovDat, wsUScases, wsUSdeaths As Worksheet
@@ -135,7 +135,7 @@ Do Until CurrentArea = ""
     Do Until FoundArea.Offset(0, 3).Text = dateStr
         Set FoundArea = wsGovDat.Range("A:A").Find(what:=AreaName, after:=FoundArea, lookat:=xlWhole)
     Loop
-    NoCases = FoundArea.Offset(0, 5)
+    NoCases = FoundArea.Offset(0, 7)
     wsFigs.Cells(areaRow, dateCol) = NoCases
     Set CurrentArea = CurrentArea.Offset(1, 0)
 Loop
@@ -186,24 +186,24 @@ Set wbTool = ThisWorkbook
 Dim filepath As String
 filepath = wbTool.Sheets("HOME").Range("FILEPATH")
 
-Dim wsFigs, wsSites, wsPeople, wsUS As Worksheet
-Dim figsShtName, sitesShtName, peopleShtName, USShtName As String
-Dim govDatName, USCasesName, USDeathsName As String
+Dim wsFigs, wsSites, wsPeople, wsUSdat, wsUS As Worksheet
+Dim figsShtName, sitesShtName, peopleShtName, USfigsShtName, USshtname As String
+Dim govDatName As String
 
 With wbTool
     With .Sheets("HOME")
         figsShtName = .Range("ENG_FIGURES")
         sitesShtName = .Range("BDUK_SITES")
         peopleShtName = .Range("BDUK_PEOPLE")
-        USShtName = .Range("US_DATA")
+        USfigsShtName = .Range("US_FIGURES")
+        USshtname = .Range("US_DATA")
         govDatName = .Range("UK_GOV_DAT")
-        USCasesName = .Range("US_CASE_DAT")
-        USDeathsName = .Range("US_DEATH_DAT")
     End With
     Set wsFigs = .Sheets(figsShtName)
     Set wsSites = .Sheets(sitesShtName)
     Set wsPeople = .Sheets(peopleShtName)
-    Set wsUS = .Sheets(USShtName)
+    Set wsUSdat = .Sheets(USfigsShtName)
+    Set wsUS = .Sheets(USshtname)
 End With
 
 'Dim wsGovDat, wsUScases, wsUSdeaths As Worksheet
@@ -319,24 +319,24 @@ Set wbTool = ThisWorkbook
 Dim filepath As String
 filepath = wbTool.Sheets("HOME").Range("FILEPATH") & "\"
 
-Dim wsFigs, wsSites, wsPeople, wsUS As Worksheet
-Dim figsShtName, sitesShtName, peopleShtName, USShtName As String
-Dim govDatName, USCasesName, USDeathsName As String
+Dim wsFigs, wsSites, wsPeople, wsUSdat, wsUS As Worksheet
+Dim figsShtName, sitesShtName, peopleShtName, USfigsShtName, USshtname As String
+Dim govDatName As String
 
 With wbTool
     With .Sheets("HOME")
         figsShtName = .Range("ENG_FIGURES")
         sitesShtName = .Range("BDUK_SITES")
         peopleShtName = .Range("BDUK_PEOPLE")
-        USShtName = .Range("US_DATA")
+        USfigsShtName = .Range("US_FIGURES")
+        USshtname = .Range("US_DATA")
         govDatName = .Range("UK_GOV_DAT")
-        USCasesName = .Range("US_CASE_DAT")
-        USDeathsName = .Range("US_DEATH_DAT")
     End With
     Set wsFigs = .Sheets(figsShtName)
     Set wsSites = .Sheets(sitesShtName)
     Set wsPeople = .Sheets(peopleShtName)
-    Set wsUS = .Sheets(USShtName)
+    Set wsUSdat = .Sheets(USfigsShtName)
+    Set wsUS = .Sheets(USshtname)
 End With
 
 'Dim wsGovDat, wsUScases, wsUSdeaths As Worksheet
@@ -364,7 +364,7 @@ wsPeople.Copy Before:=peopleCSV.Sheets(1)
 peopleCSV.SaveAs filename:=filename, FileFormat:=xlCSV, CreateBackup:=False
 peopleCSV.Close savechanges:=True
 
-filename = filepath & USShtName
+filename = filepath & USshtname
 Set usCSV = Workbooks.Add
 wsUS.Copy Before:=usCSV.Sheets(1)
 usCSV.SaveAs filename:=filename, FileFormat:=xlCSV, CreateBackup:=False
@@ -374,3 +374,4 @@ Application.DisplayAlerts = True
 Application.ScreenUpdating = True
 
 End Sub
+
