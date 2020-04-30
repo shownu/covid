@@ -1,5 +1,13 @@
 Option Explicit
 
+Function AlreadyOpen(sFname As String) As Boolean
+    Dim wkb As Workbook
+    On Error Resume Next
+    Set wkb = Workbooks(sFname)
+    AlreadyOpen = Not wkb Is Nothing
+    Set wkb = Nothing
+End Function
+
 Sub UPDATE_US_DAT()
 
 '-------- initial setup -----------
@@ -93,9 +101,16 @@ With wbTool
 End With
 
 Dim wsGovDat, wsUScases, wsUSdeaths As Worksheet
+   
+If AlreadyOpen(govDatName) Then
+    Set wsGovDat = Workbooks(govDatName).Sheets(1)
+    wsGovDat.Columns.AutoFit
+Else
+    MsgBox "Please ensure UK gov data workbook is open and its filename is correct before trying again."
+    Exit Sub
+End If
 
-Set wsGovDat = Workbooks(govDatName).Sheets(1)
-wsGovDat.Columns.AutoFit
+
 'Set wsUScases = Workbooks(USCasesName).Sheets(1)
 'wsUScases.Columns.AutoFit
 'Set wsUSdeaths = Workbooks(USDeathsName).Sheets(1)
