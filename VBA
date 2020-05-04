@@ -1,3 +1,9 @@
+Const figsShtName As String = "ENG_FIGURES"
+Const sitesShtName As String = "BDUK_SITES"
+Const peopleShtName As String = "BDUK_PEOPLE"
+Const USfigsShtName As String = "US_FIGURES"
+Const USshtname As String = "US_DATA"
+
 Option Explicit
 
 Function AlreadyOpen(sFname As String) As Boolean
@@ -18,22 +24,11 @@ Sub UPDATE_US_DAT()
     Dim wbTool As Workbook
     Set wbTool = ThisWorkbook
     
-    Dim filepath As String
-    filepath = wbTool.Sheets("HOME").Range("FILEPATH")
-    
     Dim wsFigs, wsSites, wsPeople, wsUSdat, wsUS As Worksheet
-    Dim figsShtName, sitesShtName, peopleShtName, USfigsShtName, USshtname As String
     Dim govDatName As String
     
     With wbTool
-        With .Sheets("HOME")
-            figsShtName = .Range("ENG_FIGURES")
-            sitesShtName = .Range("BDUK_SITES")
-            peopleShtName = .Range("BDUK_PEOPLE")
-            USfigsShtName = .Range("US_FIGURES")
-            USshtname = .Range("US_DATA")
-            govDatName = .Range("UK_GOV_DAT")
-        End With
+        govDatName = .Sheets("HOME").Range("UK_GOV_DAT")
         Set wsFigs = .Sheets(figsShtName)
         Set wsSites = .Sheets(sitesShtName)
         Set wsPeople = .Sheets(peopleShtName)
@@ -71,22 +66,11 @@ Sub UPDATE_UK_DAT()
     Dim wbTool As Workbook
     Set wbTool = ThisWorkbook
     
-    Dim filepath As String
-    filepath = wbTool.Sheets("HOME").Range("FILEPATH")
-    
     Dim wsFigs, wsSites, wsPeople, wsUSdat, wsUS As Worksheet
-    Dim figsShtName, sitesShtName, peopleShtName, USfigsShtName, USshtname As String
     Dim govDatName As String
     
     With wbTool
-        With .Sheets("HOME")
-            figsShtName = .Range("ENG_FIGURES")
-            sitesShtName = .Range("BDUK_SITES")
-            peopleShtName = .Range("BDUK_PEOPLE")
-            USfigsShtName = .Range("US_FIGURES")
-            USshtname = .Range("US_DATA")
-            govDatName = .Range("UK_GOV_DAT")
-        End With
+        govDatName = .Sheets("HOME").Range("UK_GOV_DAT")
         Set wsFigs = .Sheets(figsShtName)
         Set wsSites = .Sheets(sitesShtName)
         Set wsPeople = .Sheets(peopleShtName)
@@ -184,22 +168,11 @@ Sub MAKE_LIST_AND_CHART_FROM_UK_DATA()
     Dim wbTool As Workbook
     Set wbTool = ThisWorkbook
     
-    Dim filepath As String
-    filepath = wbTool.Sheets("HOME").Range("FILEPATH")
-    
     Dim wsFigs, wsSites, wsPeople, wsUSdat, wsUS As Worksheet
-    Dim figsShtName, sitesShtName, peopleShtName, USfigsShtName, USshtname As String
     Dim govDatName As String
     
     With wbTool
-        With .Sheets("HOME")
-            figsShtName = .Range("ENG_FIGURES")
-            sitesShtName = .Range("BDUK_SITES")
-            peopleShtName = .Range("BDUK_PEOPLE")
-            USfigsShtName = .Range("US_FIGURES")
-            USshtname = .Range("US_DATA")
-            govDatName = .Range("UK_GOV_DAT")
-        End With
+        govDatName = .Sheets("HOME").Range("UK_GOV_DAT")
         Set wsFigs = .Sheets(figsShtName)
         Set wsSites = .Sheets(sitesShtName)
         Set wsPeople = .Sheets(peopleShtName)
@@ -311,29 +284,21 @@ Sub EXPORT_AS_CSV()
     Dim wbTool As Workbook
     Set wbTool = ThisWorkbook
     
-    Dim filepath As String
-    filepath = wbTool.Sheets("HOME").Range("FILEPATH") & "\"
-    
     Dim wsFigs, wsSites, wsPeople, wsUSdat, wsUS As Worksheet
-    Dim figsShtName, sitesShtName, peopleShtName, USfigsShtName, USshtname As String
     Dim govDatName As String
     
     With wbTool
-        With .Sheets("HOME")
-            figsShtName = .Range("ENG_FIGURES")
-            sitesShtName = .Range("BDUK_SITES")
-            peopleShtName = .Range("BDUK_PEOPLE")
-            USfigsShtName = .Range("US_FIGURES")
-            USshtname = .Range("US_DATA")
-            govDatName = .Range("UK_GOV_DAT")
-        End With
+        govDatName = .Sheets("HOME").Range("UK_GOV_DAT")
         Set wsFigs = .Sheets(figsShtName)
         Set wsSites = .Sheets(sitesShtName)
         Set wsPeople = .Sheets(peopleShtName)
         Set wsUSdat = .Sheets(USfigsShtName)
         Set wsUS = .Sheets(USshtname)
     End With
-
+    
+    Dim filepath As String
+    filepath = wbTool.Sheets("HOME").Range("FILEPATH") & "\"
+    
 '----------- prep & export csvs ---------------
 
     wsSites.Columns("H:I").Delete
@@ -363,4 +328,3 @@ Sub EXPORT_AS_CSV()
     Application.ScreenUpdating = True
 
 End Sub
-
