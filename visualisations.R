@@ -2,7 +2,7 @@ library(leaflet)
 
 show_bduk_sites <- function(dat) {
   test2 <- dat
-  mybins <- seq(0, max(test2$cases)+300, by=250)
+  mybins <- seq(0, max(test2$cases)+300, by=500)
   mypalette <- colorBin( palette="YlOrBr", domain=test2$cases, na.color="transparent", bins=mybins)
   mytext <- paste(test2$base, sep=" ") %>%
     lapply(htmltools::HTML)
@@ -22,7 +22,7 @@ show_bduk_sites <- function(dat) {
 
 show_us_sites <- function(dat) {
   test2 <- dat
-  mybins <- seq(0, max(test2$cases)+5000, by=5000)
+  mybins <- seq(0, max(test2$cases)+9000, by=10000)
   mypalette <- colorBin( palette="YlOrBr", domain=test2$cases, na.color="transparent", bins=mybins)
   mytext <- paste(test2$cases, "cases,", test2$deaths, "deaths", sep=" ") %>%
     lapply(htmltools::HTML)
