@@ -34,18 +34,19 @@ plot_chart <- function(sf, var) {
 
 plot_chart(sf_nuts1, var_nuts1) # skeleton
 
-
-shapeData <- readOGR( 
-  dsn= getwd() , 
-  layer="2c2f23fe-79f5-4937-8e63-54a06a40b71b2020410-1-9kqbwq.54zqf",
-  verbose=FALSE
-)
-
 overlay_map <- function(sf) { # add var later
-  shapeData <- spTransform(sf, CRS("+proj=longlat +ellps=GRS80"))
-  leaflet()  %>% addTiles() %>% 
-  setView(lat = 55, lng=0,zoom=6) %>% 
-  addPolygons(data=shapeData, weight=2, col = 'green') 
+  val <- LADS$cases
+  mybins <- seq(0, max(val, na.rm=TRUE)+500, by=500)
+  mytext <- paste(val, "cases in", LADS$nuts318nm, sep=" ") %>%
+    lapply(htmltools::HTML)
+  mypalette <- colorBin( palette="Greens", domain=val, na.color="transparent", bins=mybins)
+  dat <- spTransform(sf, CRS("+proj=longlat +ellps=GRS80"))
+  m <- leaflet()  %>% addTiles() %>% 
+    setView(lat = 55, lng=3,zoom=6) %>% 
+    addProviderTiles(providers$CartoDB.Voyager) %>% 
+    addPolygons(data=dat, weight=1, col = ~mypalette(val), popup = mytext) %>%
+    addLegend( pal=mypalette, values=val, opacity=0.9, title = "Cases", position = "bottomleft" )
+  m
 }
 
-overlay_map(sf_nuts1)
+overlay_map(sf_nuts2)
