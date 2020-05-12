@@ -3,6 +3,7 @@ Const sitesShtName As String = "BDUK_SITES"
 Const peopleShtName As String = "BDUK_PEOPLE"
 Const USfigsShtName As String = "US_FIGURES"
 Const USshtname As String = "US_DATA"
+Const countyShtName As String = "LADS"
 
 Option Explicit
 
@@ -24,7 +25,7 @@ Sub UPDATE_US_DAT()
     Dim wbTool As Workbook
     Set wbTool = ThisWorkbook
     
-    Dim wsFigs, wsSites, wsPeople, wsUSdat, wsUS As Worksheet
+    Dim wsFigs, wsSites, wsPeople, wsUSdat, wsUS, wsLads As Worksheet
     Dim govDatName As String
     
     With wbTool
@@ -34,6 +35,7 @@ Sub UPDATE_US_DAT()
         Set wsPeople = .Sheets(peopleShtName)
         Set wsUSdat = .Sheets(USfigsShtName)
         Set wsUS = .Sheets(USshtname)
+        Set wsLads = .Sheets(countyShtName)
     End With
 
 '----------------- update numbers -------------------
@@ -66,7 +68,7 @@ Sub UPDATE_UK_DAT()
     Dim wbTool As Workbook
     Set wbTool = ThisWorkbook
     
-    Dim wsFigs, wsSites, wsPeople, wsUSdat, wsUS As Worksheet
+    Dim wsFigs, wsSites, wsPeople, wsUSdat, wsUS, wsLads As Worksheet
     Dim govDatName As String
     
     With wbTool
@@ -76,6 +78,7 @@ Sub UPDATE_UK_DAT()
         Set wsPeople = .Sheets(peopleShtName)
         Set wsUSdat = .Sheets(USfigsShtName)
         Set wsUS = .Sheets(USshtname)
+        Set wsLads = .Sheets(countyShtName)
     End With
     
     Dim wsGovDat, wsUScases, wsUSdeaths As Worksheet
@@ -129,6 +132,7 @@ Sub UPDATE_UK_DAT()
 
     Dim EndOfRow As Integer
     Dim i As Integer
+    Dim FoundCounty As Range
     
     i = wsFigs.Range("A1").End(xlToRight).Column
     
@@ -154,6 +158,8 @@ Sub UPDATE_UK_DAT()
         Set FoundArea = wsFigs.Range("A:A").Find(AreaName)
         NoCases = wsFigs.Cells(FoundArea.Row, i)
         CurrentArea.Offset(0, 3) = NoCases
+        Set FoundCounty = wsLads.Range("C:C").Find(AreaName)
+        wsLads.Cells(FoundCounty.Row, 4) = NoCases
     Set CurrentArea = CurrentArea.Offset(1, 0)
     Loop
 
@@ -168,7 +174,7 @@ Sub MAKE_LIST_AND_CHART_FROM_UK_DATA()
     Dim wbTool As Workbook
     Set wbTool = ThisWorkbook
     
-    Dim wsFigs, wsSites, wsPeople, wsUSdat, wsUS As Worksheet
+    Dim wsFigs, wsSites, wsPeople, wsUSdat, wsUS, wsLads As Worksheet
     Dim govDatName As String
     
     With wbTool
@@ -178,6 +184,7 @@ Sub MAKE_LIST_AND_CHART_FROM_UK_DATA()
         Set wsPeople = .Sheets(peopleShtName)
         Set wsUSdat = .Sheets(USfigsShtName)
         Set wsUS = .Sheets(USshtname)
+        Set wsLads = .Sheets(countyShtName)
     End With
 
 '----------------- make list -------------------
@@ -284,7 +291,7 @@ Sub EXPORT_AS_CSV()
     Dim wbTool As Workbook
     Set wbTool = ThisWorkbook
     
-    Dim wsFigs, wsSites, wsPeople, wsUSdat, wsUS As Worksheet
+    Dim wsFigs, wsSites, wsPeople, wsUSdat, wsUS, wsLads As Worksheet
     Dim govDatName As String
     
     With wbTool
@@ -294,6 +301,7 @@ Sub EXPORT_AS_CSV()
         Set wsPeople = .Sheets(peopleShtName)
         Set wsUSdat = .Sheets(USfigsShtName)
         Set wsUS = .Sheets(USshtname)
+        Set wsLads = .Sheets(countyShtName)
     End With
     
     Dim filepath As String
@@ -303,7 +311,7 @@ Sub EXPORT_AS_CSV()
 
     wsSites.Columns("H:I").Delete
     
-    Dim sitesCSV, peopleCSV, usCSV As Workbook
+    Dim sitesCSV, peopleCSV, usCSV, countyCSV As Workbook
     Dim filename As String
     
     filename = filepath & sitesShtName
@@ -324,7 +332,14 @@ Sub EXPORT_AS_CSV()
     usCSV.SaveAs filename:=filename, FileFormat:=xlCSV, CreateBackup:=False
     usCSV.Close savechanges:=True
     
+    filename = filepath & countyShtName
+    Set countyCSV = Workbooks.Add
+    wsLads.Copy Before:=countyCSV.Sheets(1)
+    countyCSV.SaveAs filename:=filename, FileFormat:=xlCSV, CreateBackup:=False
+    countyCSV.Close savechanges:=True
+    
     Application.DisplayAlerts = True
     Application.ScreenUpdating = True
 
 End Sub
+
