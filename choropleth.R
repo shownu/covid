@@ -39,12 +39,13 @@ overlay_map <- function(sf) { # add var later
   mybins <- seq(0, max(val, na.rm=TRUE)+500, by=500)
   mytext <- paste(val, "cases in", LADS$nuts318nm, sep=" ") %>%
     lapply(htmltools::HTML)
-  mypalette <- colorBin( palette="RdYlGn", domain=val, na.color="transparent", bins=mybins, reverse=TRUE)
+  mypalette <- colorBin( palette="Greens", domain=val, na.color="transparent", bins=mybins, reverse=FALSE)
+  line_palette <- colorBin( palette="Greys", domain=val, na.color="transparent", bins=mybins, reverse=TRUE)
   dat <- spTransform(sf, CRS("+proj=longlat +ellps=GRS80"))
   m <- leaflet()  %>% addTiles() %>% 
     setView(lat = 55, lng=3,zoom=6) %>% 
     addProviderTiles(providers$CartoDB.Voyager) %>% 
-    addPolygons(data=dat, stroke=FALSE, weight=2, fillColor = ~mypalette(val), fillOpacity = 1, popup = mytext) %>%
+    addPolygons(data=dat, weight=0.8, opacity=1, color=~line_palette(val), fillColor = ~mypalette(val), fillOpacity = 0.6, popup = mytext) %>%
     addLegend( pal=mypalette, values=val, opacity=0.9, title = "Cases", position = "bottomleft" )
   m
 }
