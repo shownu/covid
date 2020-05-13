@@ -2,7 +2,7 @@ library(leaflet)
 
 show_bduk_sites <- function(dat) {
   test2 <- dat
-  mybins <- seq(0, max(test2$cases)+300, by=500)
+  mybins <- seq(0, max(test2$cases)+500, by=500)
   mypalette <- colorBin( palette="YlOrBr", domain=test2$cases, na.color="transparent", bins=mybins)
   mytext <- paste(test2$base, sep=" ") %>%
     lapply(htmltools::HTML)
@@ -37,6 +37,26 @@ show_us_sites <- function(dat) {
     ) %>%
     addLegend( pal=mypalette, values=~cases, opacity=0.9, title = "Cases", position = "bottomleft" )
   m 
+}
+
+
+show_uk_areas <- function(dat) {
+  test2 <- dat
+  mybins <- seq(0, max(test2$cases)+2500, by=2000)
+  mypalette <- colorBin( palette="YlOrBr", domain=test2$cases, na.color="transparent", bins=mybins)
+  mytext <- paste(test2$area, "-", test2$cases, "cases", sep=" ") %>%
+    lapply(htmltools::HTML)
+  m <- leaflet(test2) %>% 
+    addTiles()  %>% 
+    setView( lat=55, lng=-5.5 , zoom=6) %>%
+    addProviderTiles(providers$CartoDB.Voyager) %>%
+    addCircleMarkers(~long, ~lat, 
+                     fillColor = ~mypalette(cases), fillOpacity = 0.8, color="black", radius=20, stroke=TRUE, weight=1,
+                     label = mytext,
+                     labelOptions = labelOptions(textOnly=FALSE, style = list("font-weight" = "normal", padding = "3px 8px"), textsize = "13px", direction = "right", noHide=T)
+    ) %>%
+    addLegend( pal=mypalette, values=~cases, opacity=0.9, title = "Cases", position = "bottomright" )
+  m
 }
 
 
