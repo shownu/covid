@@ -22,13 +22,13 @@ show_bduk_sites <- function(dat) {
 
 show_us_sites <- function(dat) {
   test2 <- dat
-  mybins <- seq(0, max(test2$cases)+9000, by=10000)
+  mybins <- seq(0, max(test2$cases)+21000, by=20000)
   mypalette <- colorBin( palette="YlOrBr", domain=test2$cases, na.color="transparent", bins=mybins)
   mytext <- paste(test2$cases, "cases,", test2$deaths, "deaths", sep=" ") %>%
     lapply(htmltools::HTML)
   m <- leaflet(test2) %>% 
     addTiles()  %>% 
-    setView( lat=40, lng=-100, zoom=4.5) %>%
+    setView( lat=40, lng=-101, zoom=4.5) %>%
     addProviderTiles(providers$CartoDB.Voyager) %>%
     addCircleMarkers(~long, ~lat, 
                      fillColor = ~mypalette(cases), fillOpacity = 0.8, color="black", radius=20, stroke=TRUE, weight=1,
@@ -74,7 +74,7 @@ show_bduk_personnel <- function(dat) {
     addCircleMarkers(~long, ~lat, 
                      fillColor = ~mypalette(status), fillOpacity = 1, color="white", radius=12, stroke=F,
                      label = mytext,
-                     labelOptions = labelOptions(textOnly=FALSE, style = list("font-weight" = "normal", padding = "3px 8px"), textsize = "13px", direction = "bottom", noHide=F)
+                     labelOptions = labelOptions(textOnly=FALSE, style = list("font-weight" = "normal", padding = "3px 8px"), textsize = "13px", direction = "top", noHide=F)
     ) %>%
     addCircleMarkers(~long, ~lat, 
                      fillColor = ~mypalette(status), fillOpacity = 0, color="white", radius=5, stroke=F,
