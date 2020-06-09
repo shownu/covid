@@ -160,6 +160,10 @@ Sub UPDATE_UK_DAT()
         CurrentArea.Offset(0, 3) = NoCases
         Set FoundCounty = wsLads.Range("C:C").Find(AreaName)
         wsLads.Cells(FoundCounty.Row, 4) = NoCases
+        If AreaName = "Hampshire" Then
+            wsLads.Cells(FoundCounty.Row - 1, 4) = NoCases
+            wsLads.Cells(FoundCounty.Row + 1, 4) = NoCases
+        End If
     Set CurrentArea = CurrentArea.Offset(1, 0)
     Loop
 
@@ -259,7 +263,7 @@ Sub MAKE_LIST_AND_CHART_FROM_UK_DATA()
         End With
         .Range("A1:A6").Select
         .Range(Selection, Selection.End(xlToRight)).Select
-        .Shapes.AddChart2(332, xlLineMarkers).Select
+        .Shapes.AddChart2(227, xlLineMarkers).Select
     End With
     
     ActiveChart.SetSourceData Source:=Sheets("CHART").Range(Cells(1, 1), Cells(6, numcol))
